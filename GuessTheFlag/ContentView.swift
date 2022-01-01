@@ -65,18 +65,9 @@ struct ContentView: View {
                             if number == correctAnswer { self.animationDegrees += 360 }
                         }
                     }) {
-                        
-                        if number == correctAnswer {
-                            withAnimation {
-                                Image(self.countries[number])
-                                    .renderingMode(.original)
-                                    .flagType
-                                    .rotation3DEffect(.degrees(animationDegrees), axis: (x: 0, y: 1, z: 0))
-                            }
-                        } else {
-                            Image(self.countries[number])
-                                .renderingMode(.original)
-                                .flagType
+                        withAnimation {
+                            flagViewOf(number)
+                                .rotation3DEffect(.degrees(number == correctAnswer ? animationDegrees : 0.0), axis: (x: 0, y: 1, z: 0))
                         }
                     }
                 }
@@ -113,6 +104,15 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+}
+
+extension ContentView {
+    
+    func flagViewOf(_ number: Int) -> some View {
+        Image(self.countries[number])
+            .renderingMode(.original)
+            .flagType
     }
 }
 
