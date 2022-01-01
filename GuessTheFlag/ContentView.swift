@@ -36,6 +36,7 @@ struct ContentView: View {
     @State private var score = 0
     
     @State private var animationDegrees = 0.0
+    @State private var animationOpacity = 1.0
     
     var body: some View {
         
@@ -62,12 +63,14 @@ struct ContentView: View {
                     Button(action: {
                         flagTapped(number)
                         withAnimation{
-                            if number == correctAnswer { self.animationDegrees += 360 }
+                            self.animationDegrees += 360
+                            self.animationOpacity = 0.25
                         }
                     }) {
                         withAnimation {
                             flagViewOf(number)
                                 .rotation3DEffect(.degrees(number == correctAnswer ? animationDegrees : 0.0), axis: (x: 0, y: 1, z: 0))
+                                .opacity(number != correctAnswer ? animationOpacity : 1.0)
                         }
                     }
                 }
@@ -89,6 +92,7 @@ struct ContentView: View {
                   message: Text(scoreMessage),
                   dismissButton: .default(Text("Continue")) {
                 askQuestion()
+                resetAnimationValues()
             }
             )
         })
@@ -104,6 +108,11 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    func resetAnimationValues() {
+        animationDegrees = 0.0
+        animationOpacity = 1.0
     }
 }
 
