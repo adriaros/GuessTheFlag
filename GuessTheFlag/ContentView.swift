@@ -7,11 +7,22 @@
 
 import SwiftUI
 
-// MARK: Challenge
+struct Flag: ViewModifier {
+   
+    func body(content: Content) -> some View {
+        content
+            .clipShape(RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.black, lineWidth: 0.5))
+            .shadow(color: .black, radius: 2)
+    }
+}
 
-// 1. Add an @State property to store the user’s score, modify it when they get an answer right or wrong, then display it in the alert.
-// 2. Show the player’s current score in a label directly below the flags.
-// 3. When someone chooses the wrong flag, tell them their mistake in your alert message – something like “Wrong! That’s the flag of France,” for example.
+extension View{
+    
+    var flagType: some View {
+        self.modifier(Flag())
+    }
+}
 
 struct ContentView: View {
     
@@ -21,8 +32,10 @@ struct ContentView: View {
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
-    @State private var scoreMessage = "" // 3.
-    @State private var score = 0 // 1.
+    @State private var scoreMessage = ""
+    @State private var score = 0
+    
+    @State private var animationDegrees = 0.0
     
     var body: some View {
         
@@ -45,20 +58,32 @@ struct ContentView: View {
                 }
                 
                 ForEach(0 ..< 3) { number in
+                    
                     Button(action: {
-                       flagTapped(number)
+                        flagTapped(number)
+                        withAnimation{
+                            if number == correctAnswer { self.animationDegrees += 360 }
+                        }
                     }) {
-                        Image(self.countries[number])
-                            .renderingMode(.original)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.black, lineWidth: 0.5))
-                            .shadow(color: .black, radius: 2)
+                        
+                        if number == correctAnswer {
+                            withAnimation {
+                                Image(self.countries[number])
+                                    .renderingMode(.original)
+                                    .flagType
+                                    .rotation3DEffect(.degrees(animationDegrees), axis: (x: 0, y: 1, z: 0))
+                            }
+                        } else {
+                            Image(self.countries[number])
+                                .renderingMode(.original)
+                                .flagType
+                        }
                     }
                 }
                 
                 Spacer()
                 
-                VStack { // 2.
+                VStack {
                     Text("Score: \(score)")
                         .foregroundColor(.white)
                         .font(.largeTitle)
@@ -72,15 +97,15 @@ struct ContentView: View {
             Alert(title: Text(scoreTitle),
                   message: Text(scoreMessage),
                   dismissButton: .default(Text("Continue")) {
-                    askQuestion()
-                  }
+                askQuestion()
+            }
             )
         })
     }
     
     func flagTapped(_ number: Int) {
         scoreTitle = (number == correctAnswer) ? "Correct" : "Wrong"
-        score = (number == correctAnswer) ? (score + 10) : 0 // 1.
+        score = (number == correctAnswer) ? (score + 10) : 0
         scoreMessage = (number != correctAnswer) ? "You failed. This is the \(countries[number]) flag" : "Your score is \(score)" // 3.
         showingScore = true
     }
