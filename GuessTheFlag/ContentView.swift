@@ -37,6 +37,7 @@ struct ContentView: View {
     
     @State private var animationDegrees = 0.0
     @State private var animationOpacity = 1.0
+    @State private var animationScale = 1.0
     
     var body: some View {
         
@@ -65,12 +66,14 @@ struct ContentView: View {
                         withAnimation{
                             self.animationDegrees += 360
                             self.animationOpacity = 0.25
+                            self.animationScale = 0.8
                         }
                     }) {
                         withAnimation {
                             flagViewOf(number)
                                 .rotation3DEffect(.degrees(number == correctAnswer ? animationDegrees : 0.0), axis: (x: 0, y: 1, z: 0))
                                 .opacity(number != correctAnswer ? animationOpacity : 1.0)
+                                .scaleEffect(number != correctAnswer ? animationScale : 1.0)
                         }
                     }
                 }
@@ -113,6 +116,7 @@ struct ContentView: View {
     func resetAnimationValues() {
         animationDegrees = 0.0
         animationOpacity = 1.0
+        animationScale = 1.0
     }
 }
 
