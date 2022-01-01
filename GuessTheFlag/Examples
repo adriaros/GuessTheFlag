@@ -1,0 +1,172 @@
+
+//
+//  ContentView.swift
+//  GuessTheFlag
+//
+//  Created by Adrià Ros on 15/3/21.
+//
+
+import SwiftUI
+
+
+// MARK: Using stacks to arrange views
+/*
+struct ContentView: View {
+    
+    var body: some View {
+        
+// Vertical stack
+//        VStack(alignment: .leading) {
+//            Text("Hello World")
+//            Text("This is inside a stack")
+//        }
+        
+// Horizontal stack
+//        HStack(spacing: 20) {
+//            Text("Hello World")
+//            Text("This is inside a stack")
+//        }
+        
+// VStack with spacer (all the views will be at the top)
+//        VStack {
+//            Text("First")
+//            Text("Second")
+//            Text("Third")
+//            Spacer()
+//        }
+        
+        // Zstack
+        ZStack {
+            Text("Hello World")
+            Text("This is inside a stack")
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+*/
+
+// MARK: Colors and frames
+/*
+struct ContentView: View {
+    
+    var body: some View {
+        
+        ZStack {
+            Color.red.edgesIgnoringSafeArea(.all) // The whole view background color ignorig safe area
+            Color.blue.frame(width: 200, height: 200) // frame background color
+            Text("Your content")
+                .background(Color.red) // text background color
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+*/
+
+/*
+// MARK: Gradients
+
+// Gradients are made up of several components:
+//- An array of colors to show
+//- Size and direction information
+//- The type of gradient to use
+
+struct ContentView: View {
+    
+    var body: some View {
+        
+        // A linear gradient goes in one direction, so we provide it with a start and end point:
+        LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
+
+        // Radial gradients move outward in a circle shape, so instead of specifying a direction we specify a start and end radius:
+        RadialGradient(gradient: Gradient(colors: [.blue, .black]), center: .center, startRadius: 5, endRadius: 200)
+        
+        // Angular gradient, although you might have heard it referred to elsewhere as a conic or conical gradient. This cycles colors around a circle rather than radiating outward, and can create some beautiful effects.
+        AngularGradient(gradient: Gradient(colors: [.red, .green, .green, .blue, .purple, .red]), center: .center)
+
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+*/
+
+/*
+// MARK: Buttons and images
+
+struct ContentView: View {
+    
+    var body: some View {
+        
+        // The simplest way to make a button
+        Button("Tap me!") {
+            print("Button was tapped")
+        }
+        
+        // If you want something more, such as an image or a combination of views, you can use this alternative form:
+        Button(action: {
+            print("Button was tapped")
+        }) {
+            Text("Tap me!")
+        }
+        
+        // Because the longer form of buttons can have any kind of views inside them, you can use images like this:
+        Button(action: {
+            print("Edit button was tapped")
+        }) {
+            Image(systemName: "pencil")
+        }
+        
+        // And of course you can combine these with stacks to make more advanced button layouts:
+        Button(action: {
+            print("Edit button was tapped")
+        }) {
+            HStack(spacing: 10) {
+                Image(systemName: "pencil")
+                Text("Edit")
+            }
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+*/
+
+// MARK: Showing alert messages
+
+struct ContentView: View {
+    
+    @State private var showingAlert = false
+
+    var body: some View {
+                
+        Button("Show Alert") {
+            showingAlert = true
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Hello SwiftUI!"), message: Text("This is some detail message"), dismissButton: .default(Text("OK")))
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
